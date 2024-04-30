@@ -17,6 +17,22 @@ const int driveCenter = 90;
 int turn = 0; // -20...20
 int vel = 0;  // -25...25
 
+//seting up the pins for the front distance sensors
+const int frontTrigPin = 2;
+const int frontEchoPin = 3;
+
+//seting up the pins for the left distance sensors
+const int leftTrigPin = 4;
+const int leftEchoPin = 5;
+
+//seting up the pins for the right distance sensors
+const int rightTrigPin = 6;
+const int rightEchoPin = 7;
+
+//seting up the pins for the front distance sensors
+const int backTrigPin = 8;
+const int backEchoPin = 9;
+
 void steer(int t, int d) {
   while (turn != t) {
     turn += turn < t ? 1 : -1;
@@ -86,6 +102,22 @@ void setup() {
   center();
   halt();
 
+  // Front Distant Sensors
+  pinMode(frontTrigPin, OUTPUT);
+  pinMode(frontEchoPin, INPUT);
+
+  // Left Distance Sensors
+  pinMode(leftTrigPin, OUTPUT);
+  pinMode(leftEchoPin, INPUT);
+
+  // Right Distance Sensors
+  pinMode(rightTrigPin, OUTPUT);
+  pinMode(rightEchoPin, INPUT);
+
+  // Back Distance Sensors
+  pinMode(backTrigPin, OUTPUT);
+  pinMode(backEchoPin, INPUT);
+  Serial.begin(9600);
 
 //  turn.write(94); // 94 CENTER!!
 //  delay(3000);
@@ -100,5 +132,61 @@ void setup() {
 }
 
 void loop() {
+  Serial.println("Distance: " + String(getDistanceFront()));
+}
 
+float getDistanceFront() {
+  digitalWrite(frontTrigPin, LOW);
+  
+  delayMicroseconds(2);
+
+  digitalWrite(frontTrigPin, HIGH); 
+
+	delayMicroseconds(10);  
+	
+  digitalWrite(frontTrigPin, LOW);  
+
+  return pulseIn(frontEchoPin, HIGH);
+}
+
+float getDistanceLeft() {
+  digitalWrite(leftTrigPin, LOW);
+  
+  delayMicroseconds(2);
+
+  digitalWrite(leftTrigPin, HIGH); 
+
+	delayMicroseconds(10);  
+	
+  digitalWrite(leftTrigPin, LOW);  
+
+  return pulseIn(leftEchoPin, HIGH);
+}
+
+float getDistanceRight() {
+  digitalWrite(rightTrigPin, LOW);
+  
+  delayMicroseconds(2);
+
+  digitalWrite(rightTrigPin, HIGH); 
+
+	delayMicroseconds(10);  
+	
+  digitalWrite(rightTrigPin, LOW);  
+
+  return pulseIn(rightEchoPin, HIGH);
+}
+
+float getDistanceBack() {
+  digitalWrite(backTrigPin, LOW);
+  
+  delayMicroseconds(2);
+
+  digitalWrite(backTrigPin, HIGH); 
+
+	delayMicroseconds(10);  
+	
+  digitalWrite(backTrigPin, LOW);  
+
+  return pulseIn(backEchoPin, HIGH);
 }

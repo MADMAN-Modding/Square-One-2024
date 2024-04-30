@@ -72,44 +72,44 @@ void loop() {
   // Usb.Task(); 
   // Speed = map((Xbox.getButtonPress(L2, 0)-Xbox.getButtonPress(R2,0)), -255, 255, 0, 180);
   // Stick = Xbox.getAnalogHat(LeftHatX, 0);
-  Speed = 20;
-  if(i%20==0){
-    if(Stick<-7500){
-    Turn = map(Stick,-7501, -32767, 86, 78);
-    NoTurn = 0;
-  }
-  if(Stick>7500){
-    Turn = map(Stick,7501, 32767, 86, 100);
-    NoTurn = 0;
-  }
-  if(NoTurn>0){
-    Turn = 87;
-  }
-  if (Speed > 85){
-    //Speed = map(Xbox.getButtonPress(R2, 0), 0, 255, 90, 180);
-  }
-  if(ActualSpeed>Speed){
-    ActualSpeed = ActualSpeed - 3;
-  }
-  else if(ActualSpeed<Speed){
-    ActualSpeed = ActualSpeed +3;
-  }
-  if((ActualSpeed<92&&ActualSpeed>88)){
-    ActualSpeed = 90;
-  }
-  Serial.print("Turn = ");
-  Serial.print(Turn);
-  Serial.print("Speed = ");
-  if(ActualSpeed> 110){
-    ActualSpeed = 105;
-  }
-  else if(ActualSpeed< 75){
-    ActualSpeed = 75;
-  }
-  Serial.println(ActualSpeed);
-  Move.write(ActualSpeed);
-  Turning.write(Turn);
-  }
+  // Speed = 20;
+  // if(i%20==0){
+  //   if(Stick<-7500){
+  //   Turn = map(Stick,-7501, -32767, 86, 78);
+  //   NoTurn = 0;
+  // }
+  // if(Stick>7500){
+  //   Turn = map(Stick,7501, 32767, 86, 100);
+  //   NoTurn = 0;
+  // }
+  // if(NoTurn>0){
+  //   Turn = 87;
+  // }
+  // if (Speed > 85){
+  //   //Speed = map(Xbox.getButtonPress(R2, 0), 0, 255, 90, 180);
+  // }
+  // if(ActualSpeed>Speed){
+  //   ActualSpeed = ActualSpeed - 3;
+  // }
+  // else if(ActualSpeed<Speed){
+  //   ActualSpeed = ActualSpeed +3;
+  // }
+  // if((ActualSpeed<92&&ActualSpeed>88)){
+  //   ActualSpeed = 90;
+  // }
+  // Serial.print("Turn = ");
+  // Serial.print(Turn);
+  // Serial.print("Speed = ");
+  // if(ActualSpeed> 110){
+  //   ActualSpeed = 105;
+  // }
+  // else if(ActualSpeed< 75){
+  //   ActualSpeed = 75;
+  // }
+  // Serial.println(ActualSpeed);
+  // Move.write(ActualSpeed);
+  // Turning.write(Turn);
+  // }
 
   Serial.println("Distance: " + String(getDistanceFront()));
   i++;
