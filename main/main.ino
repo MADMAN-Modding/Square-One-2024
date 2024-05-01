@@ -26,12 +26,14 @@ const int leftTrigPin = 4;
 const int leftEchoPin = 5;
 
 //seting up the pins for the right distance sensors
-const int rightTrigPin = 6;
-const int rightEchoPin = 7;
+const int backTrigPin = 6;
+const int backEchoPin = 7;
 
 //seting up the pins for the front distance sensors
-const int backTrigPin = 8;
-const int backEchoPin = 9;
+// const int backTrigPin = 8;
+// const int backEchoPin = 9;
+
+const int lightPin = 9;
 
 void steer(int t, int d) {
   while (turn != t) {
@@ -83,24 +85,24 @@ void setup() {
   turnPin.attach(12);
   drivePin.attach(10);
 
-  center();
-  halt();
+  // center();
+  // halt();
   delay(500);
 
   // Box Maneuver
 
-  steerDrive(  0,  20, 1000); // drive out of box
-  steerDrive( 20,  15, 5000); // steer right out o
-  steerDrive(  0,  15,  500); // ease forward
-  steerDrive(  0,   0, 2000); // pause
-  steerDrive(  0, -20, 2000); // back-up
-  steerDrive(  0,   0, 2000); // pause
-  steerDrive( 20,  15, 5000); // steer right into boxmk,jih
-  steerDrive(  0,  15,  500);
-  steerDrive(  0,  0,   500);
+  // steerDrive(  0,  20, 1000); // drive out of box
+  // steerDrive( 20,  15, 5000); // steer right out o
+  // steerDrive(  0,  15,  500); // ease forward
+  // steerDrive(  0,   0, 2000); // pause
+  // steerDrive(  0, -20, 2000); // back-up
+  // steerDrive(  0,   0, 2000); // pause
+  // steerDrive( 20,  15, 5000); // steer right into boxmk,jih
+  // steerDrive(  0,  15,  500);
+  // steerDrive(  0,  0,   500);
 
-  center();
-  halt();
+  // center();
+  // halt();
 
   // Front Distant Sensors
   pinMode(frontTrigPin, OUTPUT);
@@ -111,24 +113,20 @@ void setup() {
   pinMode(leftEchoPin, INPUT);
 
   // Right Distance Sensors
-  pinMode(rightTrigPin, OUTPUT);
-  pinMode(rightEchoPin, INPUT);
+  // pinMode(rightTrigPin, OUTPUT);
+  // pinMode(rightEchoPin, INPUT);
 
   // Back Distance Sensors
   pinMode(backTrigPin, OUTPUT);
   pinMode(backEchoPin, INPUT);
   Serial.begin(9600);
 
-//  turn.write(94); // 94 CENTER!!
-//  delay(3000);
-//  turn.write(74); // 94 - 20 = 144 LEFT!!
-//  delay(3000);
-//  turn.write(94); // 94 CENTER!!
-//  delay(3000);
-//  turn.write(114); // 94 + 20 = 144 RIGHT!!
+  pinMode(lightPin, OUTPUT);
 
-//  drive.write(110)// ; Forward -- "That's a good speed" - Mr. Dickie
-//  drive.write(80); // Backward -- "Hehehe...there you go" - Mr. Dickie
+  // alphaTask();
+
+  blinkLight(5);
+  // driveToDistance(40);
 }
 
 void loop() {
@@ -163,19 +161,19 @@ float getDistanceLeft() {
   return pulseIn(leftEchoPin, HIGH);
 }
 
-float getDistanceRight() {
-  digitalWrite(rightTrigPin, LOW);
+// float getDistanceRight() {
+//   digitalWrite(rightTrigPin, LOW);
   
-  delayMicroseconds(2);
+//   delayMicroseconds(2);
 
-  digitalWrite(rightTrigPin, HIGH); 
+//   digitalWrite(rightTrigPin, HIGH); 
 
-	delayMicroseconds(10);  
+// 	delayMicroseconds(10);  
 	
-  digitalWrite(rightTrigPin, LOW);  
+//   digitalWrite(rightTrigPin, LOW);  
 
-  return pulseIn(rightEchoPin, HIGH);
-}
+//   return pulseIn(rightEchoPin, HIGH);
+// }
 
 float getDistanceBack() {
   digitalWrite(backTrigPin, LOW);
@@ -190,3 +188,36 @@ float getDistanceBack() {
 
   return pulseIn(backEchoPin, HIGH);
 }
+
+void alphaTest() {
+  turnPin.write(94); // 94 CENTER!!
+  delay(3000);
+  turnPin.write(74); // 94 - 20 = 144 LEFT!!
+  delay(3000);
+  turnPin.write(94); // 94 CENTER!!
+  delay(3000);
+  turnPin.write(114); // 94 + 20 = 144 RIGHT!!
+
+  drivePin.write(110); // Forward -- "That's a good speed" - Mr. Dickie
+  drivePin.write(80); // Backward -- "Hehehe...there you go" - Mr. Dickie
+
+  blinkLight(10000);
+}
+
+void driveToDistance(float distance) {
+  
+  while(getDistanceFront() <= distance) {
+    drive(40, 10);
+  }
+
+}
+
+void blinkLight(int time) {
+  for (int i = 0; i < time; i++) {
+    digitalWrite(lightPin, HIGH);
+    delay(1000);
+    digitalWrite(lightPin, LOW);
+    delay(1000);
+  }
+}
+
