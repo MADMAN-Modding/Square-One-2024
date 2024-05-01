@@ -1,22 +1,21 @@
-// #include <XBOXRECV.h>
-#include<Servo.h>
-// Satisfy IDE, which only needs to see the include statment in the ino.
-#ifdef dobogusinclude
-#include <spi4teensy3.h>
-#endif
-// USB Usb;
-// XBOXRECV Xbox(&Usb);
+/*
+ Controlling a servo position using a potentiometer (variable resistor)
+ by Michal Rinott <http://people.interaction-ivrea.it/m.rinott>
 
-/* Define the rotational speed of the motor. MUST be between 0 and 255. */
-int Motorpin = 6; // must use pins 5 and 6 to avoid pin conflict with usb shield 
-int Turnpin = 12; 
-int Stick = 0;
-int Speed=1;
-int Turn=1;
-int ActualSpeed = 90; // servo write of stop
-int ActualTurn = 87; // degree of straight
-bool NoTurn = true;
-int i;
+ modified on 8 Nov 2013
+ by Scott Fitzgerald
+ http://www.arduino.cc/en/Tutorial/Knob
+*/
+
+#include <Servo.h>
+
+Servo turnPin;
+Servo drivePin;
+
+const int turnCenter = 94;
+const int driveCenter = 90;
+int turn = 0; // -20...20
+int vel = 0;  // -25...25
 
 //seting up the pins for the front distance sensors
 const int frontTrigPin = 2;
@@ -34,20 +33,75 @@ const int rightEchoPin = 7;
 const int backTrigPin = 8;
 const int backEchoPin = 9;
 
-Servo Move;
-Servo Turning;
+void steer(int t, int d) {
+  while (turn != t) {
+    turn += turn < t ? 1 : -1;
+
+    turnPin.write(turnCenter + turn);
+
+    delay(20);
+  }
+
+  delay(d);
+}
+
+void drive(int v, int d) {
+  while (vel != v) {
+    vel += vel < v ? 1 : -1;
+
+    drivePin.write(driveCenter + vel);
+
+    delay(20);
+  }
+
+  delay(d);
+}
+
+void center() {
+  turnPin.write(turnCenter);
+}
+
+void halt() {
+  drivePin.write(driveCenter);
+}
+
+void steerDrive(int t, int v, int d) {
+  while (turn != t && vel != v) {
+    turn += turn < t ? 1 : -1;
+    vel += vel < v ? 1 : -1;
+
+    turnPin.write(turnCenter + turn);
+    drivePin.write(driveCenter + vel);
+
+    delay(20);
+  }
+
+  delay(d);
+}
+
 void setup() {
-  Move.attach(Motorpin);
-  Turning.attach(Turnpin);
-  TCCR1B = TCCR1B & 0b11111000 | 0x02;
-  Serial.begin(9600);
-  // if (Usb.Init() == -1) {
-  //   Serial.print(F("\r\nOSC did not start"));
-  // }
-  Serial.print(F("\r\nXbox Wireless Receiver Library Started"));
-  pinMode (Motorpin, OUTPUT);
-  pinMode (Turnpin, OUTPUT);
-  
+  turnPin.attach(12);
+  drivePin.attach(10);
+
+  center();
+  halt();
+  delay(500);
+
+  // Box Maneuver
+
+  steerDrive(  0,  20, 1000); // drive out of box
+  steerDrive( 20,  15, 5000); // steer right out o
+  steerDrive(  0,  15,  500); // ease forward
+  steerDrive(  0,   0, 2000); // pause
+  steerDrive(  0, -20, 2000); // back-up
+  steerDrive(  0,   0, 2000); // pause
+  steerDrive( 20,  15, 5000); // steer right into boxmk,jih
+  steerDrive(  0,  15,  500);
+  steerDrive(  0,  0,   500);
+
+  center();
+  halt();
+
   // Front Distant Sensors
   pinMode(frontTrigPin, OUTPUT);
   pinMode(frontEchoPin, INPUT);
@@ -65,54 +119,20 @@ void setup() {
   pinMode(backEchoPin, INPUT);
   Serial.begin(9600);
 
+//  turn.write(94); // 94 CENTER!!
+//  delay(3000);
+//  turn.write(74); // 94 - 20 = 144 LEFT!!
+//  delay(3000);
+//  turn.write(94); // 94 CENTER!!
+//  delay(3000);
+//  turn.write(114); // 94 + 20 = 144 RIGHT!!
+
+//  drive.write(110)// ; Forward -- "That's a good speed" - Mr. Dickie
+//  drive.write(80); // Backward -- "Hehehe...there you go" - Mr. Dickie
 }
 
 void loop() {
-  NoTurn = 1;
-  // Usb.Task(); 
-  // Speed = map((Xbox.getButtonPress(L2, 0)-Xbox.getButtonPress(R2,0)), -255, 255, 0, 180);
-  // Stick = Xbox.getAnalogHat(LeftHatX, 0);
-  // Speed = 20;
-  // if(i%20==0){
-  //   if(Stick<-7500){
-  //   Turn = map(Stick,-7501, -32767, 86, 78);
-  //   NoTurn = 0;
-  // }
-  // if(Stick>7500){
-  //   Turn = map(Stick,7501, 32767, 86, 100);
-  //   NoTurn = 0;
-  // }
-  // if(NoTurn>0){
-  //   Turn = 87;
-  // }
-  // if (Speed > 85){
-  //   //Speed = map(Xbox.getButtonPress(R2, 0), 0, 255, 90, 180);
-  // }
-  // if(ActualSpeed>Speed){
-  //   ActualSpeed = ActualSpeed - 3;
-  // }
-  // else if(ActualSpeed<Speed){
-  //   ActualSpeed = ActualSpeed +3;
-  // }
-  // if((ActualSpeed<92&&ActualSpeed>88)){
-  //   ActualSpeed = 90;
-  // }
-  // Serial.print("Turn = ");
-  // Serial.print(Turn);
-  // Serial.print("Speed = ");
-  // if(ActualSpeed> 110){
-  //   ActualSpeed = 105;
-  // }
-  // else if(ActualSpeed< 75){
-  //   ActualSpeed = 75;
-  // }
-  // Serial.println(ActualSpeed);
-  // Move.write(ActualSpeed);
-  // Turning.write(Turn);
-  // }
-
   Serial.println("Distance: " + String(getDistanceFront()));
-  i++;
 }
 
 float getDistanceFront() {
