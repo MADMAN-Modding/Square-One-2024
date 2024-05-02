@@ -102,14 +102,15 @@ void setup() {
 
   pinMode(lightPin, OUTPUT);
 
+  center();
+  halt();
+
+  delay(500);
+
   // alphaTask();
   // bravoTest();
   // charlieTest();
   // deltaTask();
-
-
-  blinkLight(5);
-  // driveToDistance(40);
 }
 
 void loop() {
@@ -132,15 +133,15 @@ float getDistanceFront() {
 
 // float getDistanceLeft() {
 //   digitalWrite(leftTrigPin, LOW);
-  
+//  
 //   delayMicroseconds(2);
-
+//
 //   digitalWrite(leftTrigPin, HIGH); 
-
+//
 // 	delayMicroseconds(10);  
-	
+// 
 //   digitalWrite(leftTrigPin, LOW);  
-
+//
 //   return pulseIn(leftEchoPin, HIGH);
 // }
 
@@ -201,7 +202,7 @@ void alphaTest() {
   drivePin.write(110); // Forward -- "That's a good speed" - Mr. Dickie
   drivePin.write(80); // Backward -- "Hehehe...there you go" - Mr. Dickie
 
-  blinkLight(10000);
+  blinkLight(10);
 }
 
 void bravoTest() {
@@ -214,6 +215,11 @@ void bravoTest() {
   steerDrive( 20,  15, 5000); // steer right into boxmk,jih
   steerDrive(  0,  15,  500);
   steerDrive(  0,  0,   500);
+
+  center():
+  halt();
+
+  blinkLight(10);
 }
 
 void charlieTest() {
