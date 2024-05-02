@@ -17,19 +17,19 @@ const int driveCenter = 90;
 int turn = 0; // -20...20
 int vel = 0;  // -25...25
 
-//seting up the pins for the front distance sensors
+//setting up the pins for the front distance sensors
 const int frontTrigPin = 2;
 const int frontEchoPin = 3;
 
-//seting up the pins for the left distance sensors
-const int leftTrigPin = 4;
-const int leftEchoPin = 5;
+//setting up the pins for the back distance sensors
+const int backTrigPin = 4;
+const int backEchoPin = 5;
 
-//seting up the pins for the right distance sensors
-const int backTrigPin = 6;
-const int backEchoPin = 7;
+//setting up the pins for the right distance sensors
+const int rightTrigPin = 6;
+const int rightEchoPin = 7;
 
-//seting up the pins for the front distance sensors
+//setting up the pins for the front distance sensors
 // const int backTrigPin = 8;
 // const int backEchoPin = 9;
 
@@ -47,7 +47,7 @@ void steer(int t, int d) {
   delay(d);
 }
 
-void drive(int v, int d) {
+void drive(int v) {
   while (vel != v) {
     vel += vel < v ? 1 : -1;
 
@@ -55,8 +55,6 @@ void drive(int v, int d) {
 
     delay(20);
   }
-
-  delay(d);
 }
 
 void center() {
@@ -108,13 +106,13 @@ void setup() {
   pinMode(frontTrigPin, OUTPUT);
   pinMode(frontEchoPin, INPUT);
 
-  // Left Distance Sensors
-  pinMode(leftTrigPin, OUTPUT);
-  pinMode(leftEchoPin, INPUT);
+  // // Left Distance Sensors
+  // pinMode(leftTrigPin, OUTPUT);
+  // pinMode(leftEchoPin, INPUT);
 
   // Right Distance Sensors
-  // pinMode(rightTrigPin, OUTPUT);
-  // pinMode(rightEchoPin, INPUT);
+  pinMode(rightTrigPin, OUTPUT);
+  pinMode(rightEchoPin, INPUT);
 
   // Back Distance Sensors
   pinMode(backTrigPin, OUTPUT);
@@ -148,33 +146,33 @@ float getDistanceFront() {
   return pulseIn(frontEchoPin, HIGH);
 }
 
-float getDistanceLeft() {
-  digitalWrite(leftTrigPin, LOW);
-  
-  delayMicroseconds(2);
-
-  digitalWrite(leftTrigPin, HIGH); 
-
-	delayMicroseconds(10);  
-	
-  digitalWrite(leftTrigPin, LOW);  
-
-  return pulseIn(leftEchoPin, HIGH);
-}
-
-// float getDistanceRight() {
-//   digitalWrite(rightTrigPin, LOW);
+// float getDistanceLeft() {
+//   digitalWrite(leftTrigPin, LOW);
   
 //   delayMicroseconds(2);
 
-//   digitalWrite(rightTrigPin, HIGH); 
+//   digitalWrite(leftTrigPin, HIGH); 
 
 // 	delayMicroseconds(10);  
 	
-//   digitalWrite(rightTrigPin, LOW);  
+//   digitalWrite(leftTrigPin, LOW);  
 
-//   return pulseIn(rightEchoPin, HIGH);
+//   return pulseIn(leftEchoPin, HIGH);
 // }
+
+float getDistanceRight() {
+  digitalWrite(rightTrigPin, LOW);
+  
+  delayMicroseconds(2);
+
+  digitalWrite(rightTrigPin, HIGH); 
+
+	delayMicroseconds(10);  
+	
+  digitalWrite(rightTrigPin, LOW);  
+
+  return pulseIn(rightEchoPin, HIGH);
+}
 
 float getDistanceBack() {
   digitalWrite(backTrigPin, LOW);
@@ -208,7 +206,7 @@ void alphaTest() {
 void driveToDistance(float distance) {
   
   while(getDistanceFront() <= distance) {
-    drive(40, 10);
+    drive(40);
   }
 
 }
@@ -228,10 +226,25 @@ void charlieTest() {
 
   while (i > 0) {
     if(getDistanceFront() > 10) {
-      drive(40, 0);
+      drive(40);
       i++
     } else if (getDistanceFront() =< 10) {
-      drive(90, 10);
+      drive(0);
+    }
+  }
+}
+
+void deltaTask() {
+  while(true) {
+
+    float distance = getDistanceFront();
+
+    if(distance < 30 && distance > 20) {
+      drive(20);
+    } else if (distance =< 20) {
+      drive (10)
+    } else if (distance > 30) {
+      drive(30);
     }
   }
 }
