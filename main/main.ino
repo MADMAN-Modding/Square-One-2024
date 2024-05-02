@@ -124,6 +124,7 @@ void setup() {
   pinMode(lightPin, OUTPUT);
 
   // alphaTask();
+  charlieTest();
 
   blinkLight(5);
   // driveToDistance(40);
@@ -221,3 +222,16 @@ void blinkLight(int time) {
   }
 }
 
+void charlieTest() {
+
+  int i = 10000;
+
+  while (i > 0) {
+    if(getDistanceFront() > 10) {
+      drive(40, 0);
+      i++
+    } else if (getDistanceFront() =< 10) {
+      drive(90, 10);
+    }
+  }
+}
