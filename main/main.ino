@@ -83,25 +83,6 @@ void setup() {
   turnPin.attach(12);
   drivePin.attach(10);
 
-  // center();
-  // halt();
-  delay(500);
-
-  // Box Maneuver
-
-  // steerDrive(  0,  20, 1000); // drive out of box
-  // steerDrive( 20,  15, 5000); // steer right out o
-  // steerDrive(  0,  15,  500); // ease forward
-  // steerDrive(  0,   0, 2000); // pause
-  // steerDrive(  0, -20, 2000); // back-up
-  // steerDrive(  0,   0, 2000); // pause
-  // steerDrive( 20,  15, 5000); // steer right into boxmk,jih
-  // steerDrive(  0,  15,  500);
-  // steerDrive(  0,  0,   500);
-
-  // center();
-  // halt();
-
   // Front Distant Sensors
   pinMode(frontTrigPin, OUTPUT);
   pinMode(frontEchoPin, INPUT);
@@ -122,7 +103,10 @@ void setup() {
   pinMode(lightPin, OUTPUT);
 
   // alphaTask();
-  charlieTest();
+  // bravoTest();
+  // charlieTest();
+  // deltaTask();
+
 
   blinkLight(5);
   // driveToDistance(40);
@@ -188,21 +172,6 @@ float getDistanceBack() {
   return pulseIn(backEchoPin, HIGH);
 }
 
-void alphaTest() {
-  turnPin.write(94); // 94 CENTER!!
-  delay(3000);
-  turnPin.write(74); // 94 - 20 = 144 LEFT!!
-  delay(3000);
-  turnPin.write(94); // 94 CENTER!!
-  delay(3000);
-  turnPin.write(114); // 94 + 20 = 144 RIGHT!!
-
-  drivePin.write(110); // Forward -- "That's a good speed" - Mr. Dickie
-  drivePin.write(80); // Backward -- "Hehehe...there you go" - Mr. Dickie
-
-  blinkLight(10000);
-}
-
 void driveToDistance(float distance) {
   
   while(getDistanceFront() <= distance) {
@@ -218,6 +187,33 @@ void blinkLight(int time) {
     digitalWrite(lightPin, LOW);
     delay(1000);
   }
+}
+
+void alphaTest() {
+  turnPin.write(94); // 94 CENTER!!
+  delay(3000);
+  turnPin.write(74); // 94 - 20 = 144 LEFT!!
+  delay(3000);
+  turnPin.write(94); // 94 CENTER!!
+  delay(3000);
+  turnPin.write(114); // 94 + 20 = 144 RIGHT!!
+
+  drivePin.write(110); // Forward -- "That's a good speed" - Mr. Dickie
+  drivePin.write(80); // Backward -- "Hehehe...there you go" - Mr. Dickie
+
+  blinkLight(10000);
+}
+
+void bravoTest() {
+  steerDrive(  0,  20, 1000); // drive out of box
+  steerDrive( 20,  15, 5000); // steer right out o
+  steerDrive(  0,  15,  500); // ease forward
+  steerDrive(  0,   0, 2000); // pause
+  steerDrive(  0, -20, 2000); // back-up
+  steerDrive(  0,   0, 2000); // pause
+  steerDrive( 20,  15, 5000); // steer right into boxmk,jih
+  steerDrive(  0,  15,  500);
+  steerDrive(  0,  0,   500);
 }
 
 void charlieTest() {
