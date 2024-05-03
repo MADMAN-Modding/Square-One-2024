@@ -33,6 +33,8 @@ const int rightEchoPin = 7;
 // const int backTrigPin = 8;
 // const int backEchoPin = 9;
 
+float frontDistanceArray[] = {0,0,0};
+
 const int lightPin = 9;
 
 void steer(int t, int d) {
@@ -118,6 +120,8 @@ void loop() {
 }
 
 float getDistanceFront() {
+
+  for (int i; i < 3; i++) {
   digitalWrite(frontTrigPin, LOW);
   
   delayMicroseconds(2);
@@ -128,7 +132,10 @@ float getDistanceFront() {
 	
   digitalWrite(frontTrigPin, LOW);  
 
-  return pulseIn(frontEchoPin, HIGH);
+  frontDistanceArray[i] = pulseIn(frontEchoPin, HIGH);
+  }
+
+  return filter(frontDistanceArray[0], frontDistanceArray[1], frontDistanceArray[2]);
 }
 
 // float getDistanceLeft() {
@@ -216,7 +223,7 @@ void bravoTest() {
   steerDrive(  0,  15,  500);
   steerDrive(  0,  0,   500);
 
-  center():
+  center();
   halt();
 
   blinkLight(10);
@@ -229,8 +236,8 @@ void charlieTest() {
   while (i > 0) {
     if(getDistanceFront() > 10) {
       drive(40);
-      i++
-    } else if (getDistanceFront() =< 10) {
+      i++;
+    } else if (getDistanceFront() <= 10) {
       drive(0);
     }
   }
@@ -243,10 +250,28 @@ void deltaTask() {
 
     if(distance < 30 && distance > 20) {
       drive(20);
-    } else if (distance =< 20) {
-      drive (10)
+    } else if (distance <= 20) {
+      drive (10);
     } else if (distance > 30) {
       drive(30);
     }
+  }
+}
+
+float filter(float a, float b, float c) {
+  if(a < b) {
+    if (b < c) {
+      return b;
+    } else if (a < c) {
+      return c;
+    } else {
+      return a;
+    }
+  } else if (a < c) {
+    return a;
+  } else if (b < c) {
+    return c;
+  } else {
+    return b;
   }
 }
