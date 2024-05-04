@@ -41,7 +41,7 @@ float backDistanceArray[] = {0,0,0};
 
 const int lightPin = 9;
 
-void steer(int t, int d) {
+void steer(int t, int d = 0) {
   while (turn != t) {
     turn += turn < t ? 1 : -1;
 
@@ -267,9 +267,9 @@ void bravoTest() {
 
   drive(20);
   delay(2000);
-  steer(20,0);
+  steer(20);
   delay(6000);
-  steer(0,0);
+  steer(0);
   delay(500);
   drive(0);
   delay(2000);
@@ -277,10 +277,10 @@ void bravoTest() {
   delay(8000);
   drive(0);
   delay(500);
-  steer(20,0);
+  steer(20);
   drive(20);
   delay(5000);
-  steer(0,0);
+  steer(0);
   delay(2000);
   drive(0);
 }
@@ -331,10 +331,10 @@ drive(-20);
 delay(2000);
 drive(0);
 delay(1000);
-steer(20, 0);
+steer(20);
 drive(-20);
 delay(3000);
-steer(-20, 0);
+steer(-20);
 delay(3000);
 drive(0);
 delay(500);
