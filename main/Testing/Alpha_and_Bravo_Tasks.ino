@@ -35,7 +35,7 @@ const int backEchoPin = 9;
 
 void steer(int t, int d) {
   while (turn != t) {
-    turn += turn < t ? 1 : -1;
+    turn += turn < t ? 1 : turn > t ? -1 : 0;
 
     turnPin.write(turnCenter + turn);
 
@@ -47,7 +47,7 @@ void steer(int t, int d) {
 
 void drive(int v, int d) {
   while (vel != v) {
-    vel += vel < v ? 1 : -1;
+    vel += vel < v ? 1 : vel > v ? -1 : 0;
 
     drivePin.write(driveCenter + vel);
 
@@ -67,8 +67,8 @@ void halt() {
 
 void steerDrive(int t, int v, int d) {
   while (turn != t && vel != v) {
-    turn += turn < t ? 1 : -1;
-    vel += vel < v ? 1 : -1;
+    turn += turn < t ? 1 : turn > t ? -1 : 0;
+    vel  +=  vel < v ? 1 :  vel > v ? -1 : 0;
 
     turnPin.write(turnCenter + turn);
     drivePin.write(driveCenter + vel);
